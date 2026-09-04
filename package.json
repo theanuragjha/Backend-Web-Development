@@ -1,0 +1,10 @@
+{
+  "name": "repository-pattern-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LU41 Repository Pattern assignment starter",
+  "main": "src/controllers/postController.js",
+  "scripts": {
+    "start": "node src/controllers/postController.js"
+  }
+}
