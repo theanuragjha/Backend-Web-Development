@@ -1,0 +1,15 @@
+{
+  "name": "lu53-authorization-rbac-starter",
+  "version": "1.0.0",
+  "description": "Starter project: implement requireRole and ownership checks for LU 53",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "node tests/run.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
