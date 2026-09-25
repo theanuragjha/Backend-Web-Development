@@ -7,16 +7,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Complete the required models, relations, constraints, and indexes.
-// Keep the model names aligned with the assignment contract.
 model User {
-  id   Int    @id @default(autoincrement())
-  name String
+  id        Int       @id @default(autoincrement())
+  name      String
+  posts     Post[]
+  comments  Comment[]
+  votes     Vote[]
+  following Follow[]  @relation("Following")
+  followers Follow[]  @relation("Followers")
 }
 
 model Post {
-  id       Int    @id @default(autoincrement())
-  title    String
-  body     String
-  authorId Int
+  id        Int       @id @default(autoincrement())
+  title     String
+  body      String
+  authorId  Int
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+  votes     Vote[]
+  tags      PostTag[]
+  createdAt DateTime  @default(now())
+
+  @@index([authorId])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  body      String
+  postId    Int
+  authorId  Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([postId])
+  @@index([authorId])
+}
+
+model Vote {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  postId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+}
+
+model Follow {
+  followerId  Int
+  followingId Int
+  follower    User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+}
+
+model Tag {
+  id    Int       @id @default(autoincrement())
+  name  String    @unique
+  posts PostTag[]
+}
+
+model PostTag {
+  postId Int
+  tagId  Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
 }

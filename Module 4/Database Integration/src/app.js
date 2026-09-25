@@ -11,7 +11,9 @@ app.patch('/posts/:id', postController.update);
 app.delete('/posts/:id', postController.remove);
 
 app.use((error, req, res, next) => {
-  res.status(error.statusCode || 500).json({ error: error.message });
+  const status = error.statusCode || 500;
+  const message = status === 500 ? 'Internal server error' : error.message;
+  res.status(status).json({ error: message });
 });
 
 if (require.main === module) {
